@@ -1,0 +1,28 @@
+.wrapper {
+  padding: 20px 30px;
+  max-width: 600px;
+  margin: 20px auto;
+  border: 1px solid #ccc;
+}
+.wrapper button, .wrapper a {
+  margin: 10px 20px;
+}
+.wrapper ul li {
+  list-style: none;
+}
+.wrapper ul {
+  margin: 0;
+  padding: 0;
+}
+.wrapper #completedList input {
+    text-decoration: line-through;
+}
+.wrapper input[type="checkbox"] {
+  margin: 0px 15px;
+}
+.wrapper #completedList input[type="text"]:disabled, .wrapper #uncompletedList input[type="text"]:disabled{
+    border: 0;
+    outline: 0;
+    background: white;
+    color: #000;
+}

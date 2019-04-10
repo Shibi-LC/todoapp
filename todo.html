@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Todo App</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <div class="wrapper">
+    <h1>Simple TODO app</h1>
+    <h2>Add Item</h2>
+    <input type="text" id="newItem" />
+    <a href="javascript:void(0)" onclick="additems()">Add</a>
+
+    <h2>Todo</h2>
+    <div id="uncompletedList">
+    </div>
+
+    <h2>
+      Completed List
+    </h2>
+
+    <div id="completedList">
+    </div>
+  </div>
+  <script> 
+	let todoList = ['Todo1', 'Todo2', 'Todo3'];
+let completedList = ['Completed1', 'Completed2', 'Completed3'];
+let editedIndex;
+showItems();
+
+function additems() {
+	let task = document.getElementById('newItem').value;
+	document.getElementById('newItem').value = '';
+	if (task)
+		todoList.push(task);
+	showItems();
+	return false;
+}
+
+function remove(e, data) {
+	let id = e.getAttribute('id');
+	data.splice(id, 1);
+	showItems();
+	return false;
+}
+
+function showItems() {
+	show(todoList, "uncompletedList");
+	show(completedList, "completedList");
+}
+
+function show(list, listName) {
+	let listBody = '<ul>';
+	for (let i = 0; i < list.length; i++) {
+		listName === "uncompletedList" ? (i === editedIndex) ? (listBody += '<li><input type="checkbox" class= "completed" id="' + i + '"><input type="text" value = ' + list[i] + ' id = "' + i + ' " class="editedValue" /><button id="save">Save</button>' + '<button class="remove" id="' + i + '">Delete</button></li>') :
+			(listBody += '<li><input type="checkbox" class= "completed" id="' + i + '"><input type="text" disabled value = ' + list[i] + ' id = ' + i + ' /><button class="edit" id="' + i + '">Edit</button>' + '<button class="remove" id="' + i + '">Delete</button></li>')
+			: listBody += '<li><input type="checkbox" class= "completed" id="' + i + '" checked' + ' disabled ><input type="text" disabled value = ' + list[i] + ' id = ' + i + ' />' + '<button class="remove" id="' + i + '">Delete</button></li>'
+			;
+	};
+	listBody += '</ul>';
+	document.getElementById(listName).innerHTML = listBody;
+	if (listName === "uncompletedList") {
+		let completed = document.getElementsByClassName('completed');
+		for (let i = 0; i < completed.length; i++) {
+			completed[i].addEventListener('change', showcompleted);
+		};
+	}
+	let editButtons = document.querySelectorAll('#' + listName + ' .edit');
+	for (let i = 0; i < editButtons.length; i++) {
+		editButtons[i].addEventListener('click', function () {
+			edit(this, list);
+		});
+	};
+	let saveButtons = document.getElementById('save');
+	if (saveButtons) {
+		saveButtons.addEventListener('click', function () {
+			save(editedIndex);
+		});
+	}
+	let deleteButtons = document.querySelectorAll('#' + listName + ' .remove');
+	for (let i = 0; i < deleteButtons.length; i++) {
+		deleteButtons[i].addEventListener('click', function () {
+			remove(this, list);
+		});
+	};
+}
+function edit(e) {
+	let id = e.getAttribute('id');
+	editedIndex = +id;
+	show(todoList, "uncompletedList");
+}
+function save(editedPos) {
+	let newValue = document.getElementsByClassName('editedValue')[0].value;
+	todoList[editedPos] = newValue;
+	editedIndex = -1;
+	show(todoList, "uncompletedList");
+}
+function showcompleted() {
+	let id = this.getAttribute('id');
+	completedList.push(todoList[id]);
+	todoList.splice(id, 1);
+	showItems();
+}
+  </script>
+</body>
+
+</html>
